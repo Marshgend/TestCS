@@ -3,6 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <title>Cotizador de Servicios</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: auto 20vw;
+            padding-top: 2vw;
+        }
+    
+        #contenedor-servicios {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+    
+        .servicio {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 10px;
+            padding: 25px;
+            width: calc(33% - 20px);
+            box-sizing: border-box;
+            border-radius: 10px;
+            height: auto;
+            background-color: #f0f0f0; /* Gris claro */
+        }
+
+        /* Estado cuando se selecciona una cantidad (necesitarás añadir esta clase con JavaScript) */
+        .servicio.selected {
+            background-color: #e2f8cd; /* Verde clarito */
+        }
+
+        .servicio .controles {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+    
+        .servicio .controles select,
+        .servicio .controles .input-cantidad {
+            font-size: 18px;
+            border-radius: 5px;
+            padding: 8px; /* Ajustar el padding para alinear la altura */
+        }
+    
+        .servicio .controles select {
+            width: 100%;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+        }
+    
+        .servicio .controles .input-cantidad {
+            width: 30%;
+            display: none;
+            margin-left: 10px;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+        }
+    
+        .servicio h3 {
+            min-height: 2em;
+            margin-top: 0;
+            margin-bottom: 0.5em;
+            font-size: 22px;
+        }
+    
+        .servicio p {
+            font-size: 1.3em;
+            font-weight: normal;
+        }
+    
+        #botones, #botones-resumen {
+            margin: 20px 0;
+            text-align: center;
+        }
+    
+        button {
+            margin: 10px 10px; /* Aumenta el margen si es necesario */
+            padding: 10px 20px; /* Aumenta el padding para hacerlos más grandes */
+            border-radius: 8px; /* Bordes más redondeados para un mejor estilo */
+            font-size: 18px; /* Aumenta el tamaño de la fuente para mejor legibilidad */
+            border: none; /* Opcional: elimina el borde si prefieres un diseño más limpio */
+            transition: background-color 0.2s; /* Transición suave para el cambio de color */
+        }
+
+        #continuar {
+            background-color: #73c034; /* Color verde más vibrante */
+            color: white; /* Texto blanco para contraste */
+        }
+
+        #continuar:hover {
+            background-color: #45a049; /* Color ligeramente más oscuro al pasar el mouse */
+        }
+
+        #reiniciar {
+            background-color: #ec6259; /* Color rojo para la acción de reiniciar */
+            color: white;
+        }
+
+        #reiniciar:hover {
+            background-color: #d32f2f; /* Color ligeramente más oscuro al pasar el mouse */
+        }
+    
+        #volver {
+            background-color: #ffcc80;
+        }
+    
+        @media (max-width: 768px) {
+            .servicio {
+                width: calc(50% - 20px);
+            }
+        }
+    
+        @media (max-width: 480px) {
+            .servicio {
+                width: 100%;
+            }
+        }
+
+        #resumen-compra {
+            font-size: 22px; /* Aumenta el tamaño de la letra */
+        }
+
+        .resumen-servicio {
+            background-color: #fff6dc; /* Fondo claro para cada servicio */
+            border-radius: 20px; /* Esquinas redondeadas para efecto de píldora */
+            padding: 10px;
+            padding-left: 25px;
+            margin-bottom: 10px; /* Espacio entre cada servicio */
+            /* Considera agregar un box-shadow o border para mejorar la distinción visual */
+        }
+
+    </style>
+
 </head>
 <body>
 
@@ -13,63 +146,100 @@
         <div class="servicio" data-precio="400" data-promocion="true">
             <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
             <p>$400.00/foto</p>
-            <select class="cantidad">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-                <option value="15">15</option>
-                <option value="16">16</option>
-                <option value="17">17</option>
-                <option value="18">18</option>
-                <option value="19">19</option>
-                <option value="20">20</option>
-                <option value="21">Otra cantidad</option>
-            </select>
-            <input type="number" class="input-cantidad" style="width: 50px; display: none;" min="0" max="99">
+            <div class="controles">
+                <select class="cantidad">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">Otra cantidad</option>
+                </select>
+                <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
+            </div>
+        </div>
+
+        <div class="servicio" data-precio="400" data-promocion="true">
+            <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
+            <p>$400.00/foto</p>
+            <div class="controles">
+                <select class="cantidad">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">Otra cantidad</option>
+                </select>
+                <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
+            </div>
         </div>
         
-        <div class="servicio" data-precio="1500" data-promocion="false">
-            <h3>Servicio de Diseño Gráfico Premium</h3>
-            <p>$1500.00/servicio</p>
-            <select class="cantidad">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-                <option value="15">15</option>
-                <option value="16">16</option>
-                <option value="17">17</option>
-                <option value="18">18</option>
-                <option value="19">19</option>
-                <option value="20">20</option>
-                <option value="21">Otra cantidad</option>
-            </select>
-            <input type="number" class="input-cantidad" style="width: 50px; display: none;" min="0" max="99">
+        <div class="servicio" data-precio="400" data-promocion="true">
+            <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
+            <p>$400.00/foto</p>
+            <div class="controles">
+                <select class="cantidad">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">Otra cantidad</option>
+                </select>
+                <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
+            </div>
         </div>
         
+
     </div>
     
     <div id="resumen-compra" style="display:none;"></div>
@@ -91,7 +261,29 @@
             const resumenCompra = document.getElementById('resumen-compra');
             const botonesResumen = document.getElementById('botones-resumen');
             const servicios = document.querySelectorAll('.servicio');
-    
+
+            // Color verde en los contenedores
+            document.querySelectorAll('.servicio').forEach((servicio, index) => {
+                const select = servicio.querySelector('.cantidad');
+                const valorGuardado = localStorage.getItem('servicio_' + index);
+
+                if (valorGuardado && valorGuardado !== '0') {
+                    servicio.classList.add('selected');
+                }
+
+                select.addEventListener('change', function() {
+                    if (this.value !== '0') {
+                        servicio.classList.add('selected');
+                    } else {
+                        servicio.classList.remove('selected');
+                    }
+
+                    // Guarda la selección en localStorage
+                    localStorage.setItem('servicio_' + index, this.value);
+                });
+            });
+
+
             servicios.forEach((servicio, index) => {
                 const servicioId = 'servicio_' + index;
                 const select = servicio.querySelector('.cantidad');
@@ -170,12 +362,12 @@
                     const input = servicio.querySelector('.input-cantidad');
                     const valorGuardado = localStorage.getItem(servicioId);
                     const valorPersonalizado = localStorage.getItem(servicioId + '_custom');
-    
+
                     if (valorGuardado) {
                         select.value = valorGuardado;
-                        if (valorGuardado === '21' && valorPersonalizado) {
-                            input.style.display = 'inline-block';
-                            input.value = valorPersonalizado;
+                        if (valorGuardado === '21') {
+                            input.style.display = 'inline-block'; // Asegurarse de mostrar el campo de texto
+                            input.value = valorPersonalizado || ''; // Establecer el valor guardado o vacío si no hay nada guardado
                         } else {
                             input.style.display = 'none';
                         }
@@ -212,7 +404,7 @@
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                 });
-    
+
                 servicios.forEach(servicio => {
                     const select = servicio.querySelector('.cantidad');
                     const input = servicio.querySelector('.input-cantidad');
@@ -220,7 +412,7 @@
                     const precio = parseInt(servicio.dataset.precio);
                     const nombre = servicio.querySelector('h3').textContent;
                     const tienePromocion = servicio.dataset.promocion === "true";
-    
+
                     let subtotal = 0;
                     if (cantidad > 0) {
                         if (tienePromocion && cantidad > 10) {
@@ -228,40 +420,41 @@
                             const cantidadConDescuento = cantidad - 10;
                             const precioConDescuento = precio * 0.7;
                             subtotal = (cantidadSinDescuento * precio) + (cantidadConDescuento * precioConDescuento);
-                            resumenHtml += `<p>${nombre} (${formatter.format(precio)} por unidad) x ${cantidadSinDescuento} = ${formatter.format(cantidadSinDescuento * precio)}</p>`;
-                            resumenHtml += `<p>${nombre} (${formatter.format(precioConDescuento)} por unidad con descuento) x ${cantidadConDescuento} = ${formatter.format(cantidadConDescuento * precioConDescuento)}</p>`;
+                            resumenHtml += `<div class="resumen-servicio"><p>${nombre} (${formatter.format(precio)} por unidad) x ${cantidadSinDescuento} = ${formatter.format(cantidadSinDescuento * precio)}</p>`;
+                            resumenHtml += `<p>${nombre} (${formatter.format(precioConDescuento)} por unidad con descuento) x ${cantidadConDescuento} = ${formatter.format(cantidadConDescuento * precioConDescuento)}</p></div>`;
                         } else {
                             subtotal = cantidad * precio;
-                            resumenHtml += `<p>${nombre} (${formatter.format(precio)} por unidad) x ${cantidad} = ${formatter.format(subtotal)}</p>`;
+                            resumenHtml += `<div class="resumen-servicio"><p>${nombre} (${formatter.format(precio)} por unidad) x ${cantidad} = ${formatter.format(subtotal)}</p></div>`;
                         }
                         total += subtotal;
                     }
                 });
-    
+
                 const iva = total * 0.16;
                 const totalConIVA = total + iva;
-    
+
                 resumenHtml += `<h3>Total: ${formatter.format(total)}</h3>`;
                 resumenHtml += `<p>IVA (16%): ${formatter.format(iva)}</p>`;
                 resumenHtml += `<h3>Total con IVA: ${formatter.format(totalConIVA)}</h3>`;
-    
+
                 localStorage.setItem('resumenHtml', resumenHtml);
-    
+
                 resumenCompra.innerHTML = resumenHtml;
                 contenedorServicios.style.display = 'none';
                 botonContinuar.style.display = 'none';
                 resumenCompra.style.display = 'block';
-    
+
                 botonesResumen.innerHTML = '<button id="volver">Atrás</button>';
                 const volverBtn = document.getElementById('volver');
                 volverBtn.addEventListener('click', () => {
                     localStorage.removeItem('estadoPagina');
                     location.reload();
                 });
-    
+
                 botonesResumen.appendChild(botonReiniciar);
                 botonesResumen.style.display = 'block';
             }
+
     
             function mostrarResumen() {
                 const resumenHtml = localStorage.getItem('resumenHtml');
