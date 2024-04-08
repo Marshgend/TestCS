@@ -120,39 +120,29 @@
             }
         }
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1024px) {
             .servicio {
                 width: calc(50% - 20px); /* Dos tarjetas por fila en pantallas medianas */
             }
         }
     
-        @media (max-width: 1024px) {
+        @media (max-width: 768px) {
             body {
                 padding: 50px 2vw; /* Menos margen para pantallas pequeñas */
             }
     
             .servicio {
                 width: 100%; /* Una tarjeta por fila en pantallas pequeñas */
-                height: 300px;
             }
     
             #resumen-compra {
-                font-size: 12px; /* Tamaño de fuente ajustado para el resumen en pantallas pequeñas */
+                font-size: 16px; /* Tamaño de fuente ajustado para el resumen en pantallas pequeñas */
             }
     
-            .servicio h3, .servicio p, button  {
-                font-size: 40px; /* Tamaño de fuente ajustado para elementos en pantallas pequeñas */
+            .servicio h3, .servicio p, button {
+                font-size: 16px; /* Tamaño de fuente ajustado para elementos en pantallas pequeñas */
             }
-
-            .titulo-categoria {
-                font-size: 55px;
-            }
-                
-            select {
-                font-size: 100px; /* Tamaño de fuente ajustado para elementos en pantallas pequeñas */
-                height: 80px; /* Altura del select */
-            }   
-            
+    
             button {
                 padding: 12px 20px;
             }
@@ -194,7 +184,7 @@
                         <option value="18">18</option>
                         <option value="19">19</option>
                         <option value="20">20</option>
-                        <option value="21">Otra cantidad</option>
+                        <option value="21_custom">Otra cantidad</option>
                     </select>
                     <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
                 </div>
@@ -237,7 +227,7 @@
                         <option value="18">18</option>
                         <option value="19">19</option>
                         <option value="20">20</option>
-                        <option value="21">Otra cantidad</option>
+                        <option value="21_custom">Otra cantidad</option>
                     </select>
                     <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
                 </div>
@@ -307,7 +297,7 @@
                     }
 
                     select.addEventListener('change', function() {
-                        if (this.value === '21') {
+                        if (this.value === '21_custom') {
                             input.style.display = 'inline-block';
                             input.focus();
                             select.style.width = '100%';
@@ -318,6 +308,7 @@
                         localStorage.setItem(servicioId, this.value);
                     });
 
+
                     input.addEventListener('blur', () => {
                         const num = parseInt(input.value);
                         if (!isNaN(num) && num >= 0 && num <= 99) {
@@ -327,6 +318,9 @@
                                 input.style.display = 'none';
                                 select.style.width = '100%';
                                 localStorage.setItem(servicioId, num.toString());
+                                if (num === 0) {
+                                    servicio.classList.remove('selected');
+                                }
                             } else {
                                 localStorage.setItem(servicioId + '_custom', input.value);
                             }
@@ -339,16 +333,10 @@
                         }
                     });
 
-                    input.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter') {
-                            input.blur();
-                        }
-                    });
-
                     const valorGuardado = localStorage.getItem(servicioId);
                     if (valorGuardado) {
                         select.value = valorGuardado;
-                        if (valorGuardado === '21') {
+                        if (valorGuardado === '21_custom') {
                             input.style.display = 'inline-block';
                             const valorGuardadoCustom = localStorage.getItem(servicioId + '_custom');
                             input.value = valorGuardadoCustom || '';
@@ -364,8 +352,6 @@
                     }
                 });
             });
-
-
 
             function guardarSelecciones() {
                 document.querySelectorAll('.servicio').forEach(servicio => {
@@ -417,7 +403,7 @@
                     const servicioId = 'servicio_' + servicio.getAttribute('data-index');
                     const select = servicio.querySelector('.cantidad');
                     const input = servicio.querySelector('.input-cantidad');
-                    let cantidad = select.value === '21' ? parseInt(localStorage.getItem(servicioId + '_custom') || 0) : parseInt(select.value);
+                    let cantidad = select.value === '21_custom' ? parseInt(localStorage.getItem(servicioId + '_custom') || 0) : parseInt(select.value);
                     const precio = parseInt(servicio.dataset.precio);
                     const nombre = servicio.querySelector('h3').textContent;
                     const tienePromocion = servicio.dataset.promocion === "true";
@@ -498,7 +484,7 @@
 
                     if (valorGuardado) {
                         select.value = valorGuardado;
-                        if (valorGuardado === '21') {
+                        if (valorGuardado === '21_custom') {
                             input.style.display = 'inline-block';
                             input.value = valorPersonalizado || '';
                         } else {
