@@ -7,14 +7,15 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: auto 20vw;
-            padding-top: 2vw;
+            margin: 0;
+            padding: 50px 5vw; /* Márgenes dinámicos */
+            padding-bottom: 25px;
         }
-    
-        #contenedor-servicios {
+
+        .contenedor-servicios {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
+            justify-content: flex-start; /* Alineación a la izquierda */
         }
     
         .servicio {
@@ -23,54 +24,47 @@
             justify-content: space-between;
             margin: 10px;
             padding: 25px;
-            width: calc(33% - 20px);
+            width: calc(25% - 20px); /* Tres tarjetas por fila en pantallas grandes */
             box-sizing: border-box;
             border-radius: 10px;
-            height: auto;
-            background-color: #f0f0f0; /* Gris claro */
+            background-color: #f0f0f0;
         }
-
-        /* Estado cuando se selecciona una cantidad (necesitarás añadir esta clase con JavaScript) */
+    
         .servicio.selected {
-            background-color: #e2f8cd; /* Verde clarito */
+            background-color: #e2f8cd;
         }
-
+    
         .servicio .controles {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 100%;
         }
     
         .servicio .controles select,
         .servicio .controles .input-cantidad {
-            font-size: 18px;
+            font-size: 16px;
             border-radius: 5px;
-            padding: 8px; /* Ajustar el padding para alinear la altura */
+            padding: 8px;
         }
     
         .servicio .controles select {
-            width: 100%;
-            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+            width: 100%; /* Cambiado de 70% a 100% */
         }
     
         .servicio .controles .input-cantidad {
             width: 30%;
             display: none;
             margin-left: 10px;
-            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
         }
     
         .servicio h3 {
-            min-height: 2em;
-            margin-top: 0;
+            margin: 0;
             margin-bottom: 0.5em;
-            font-size: 22px;
+            font-size: 18px;
         }
     
         .servicio p {
-            font-size: 1.3em;
-            font-weight: normal;
+            font-size: 16px;
         }
     
         #botones, #botones-resumen {
@@ -79,30 +73,30 @@
         }
     
         button {
-            margin: 10px 10px; /* Aumenta el margen si es necesario */
-            padding: 10px 20px; /* Aumenta el padding para hacerlos más grandes */
-            border-radius: 8px; /* Bordes más redondeados para un mejor estilo */
-            font-size: 18px; /* Aumenta el tamaño de la fuente para mejor legibilidad */
-            border: none; /* Opcional: elimina el borde si prefieres un diseño más limpio */
-            transition: background-color 0.2s; /* Transición suave para el cambio de color */
+            margin: 10px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 18px;
+            border: none;
+            transition: background-color 0.2s;
         }
-
+    
         #continuar {
-            background-color: #73c034; /* Color verde más vibrante */
-            color: white; /* Texto blanco para contraste */
-        }
-
-        #continuar:hover {
-            background-color: #45a049; /* Color ligeramente más oscuro al pasar el mouse */
-        }
-
-        #reiniciar {
-            background-color: #ec6259; /* Color rojo para la acción de reiniciar */
+            background-color: #73c034;
             color: white;
         }
-
+    
+        #continuar:hover {
+            background-color: #45a049;
+        }
+    
+        #reiniciar {
+            background-color: #ec6259;
+            color: white;
+        }
+    
         #reiniciar:hover {
-            background-color: #d32f2f; /* Color ligeramente más oscuro al pasar el mouse */
+            background-color: #d32f2f;
         }
     
         #volver {
@@ -110,264 +104,137 @@
         }
     
         #resumen-compra {
-            font-size: 22px; /* Aumenta el tamaño de la letra */
+            font-size: 18px;
         }
-        
+    
         .resumen-servicio {
-            background-color: #fff6dc; /* Fondo claro para cada servicio */
-            border-radius: 20px; /* Esquinas redondeadas para efecto de píldora */
+            background-color: #fff6dc;
+            border-radius: 10px;
             padding: 10px;
-            padding-left: 25px;
-            margin-bottom: 10px; /* Espacio entre cada servicio */
-            /* Considera agregar un box-shadow o border para mejorar la distinción visual */
+            margin-bottom: 10px;
         }
         
         @media (max-width: 1450px) {
             .servicio {
-                width: calc(50% - 20px);
+                width: calc(33.33% - 20px); /* Tres tarjetas por fila */
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .servicio {
+                width: calc(50% - 20px); /* Dos tarjetas por fila en pantallas medianas */
             }
         }
     
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
+            body {
+                padding: 50px 2vw; /* Menos margen para pantallas pequeñas */
+            }
+    
             .servicio {
-                width: 100%;
+                width: 100%; /* Una tarjeta por fila en pantallas pequeñas */
+            }
+    
+            #resumen-compra {
+                font-size: 16px; /* Tamaño de fuente ajustado para el resumen en pantallas pequeñas */
+            }
+    
+            .servicio h3, .servicio p, button {
+                font-size: 16px; /* Tamaño de fuente ajustado para elementos en pantallas pequeñas */
+            }
+    
+            button {
+                padding: 12px 20px;
             }
         }
     </style>
+    
 
 </head>
 <body>
 
-    <!-- Contenedor de servicios -->
-    <div id="contenedor-servicios">
-        <!-- Ejemplo de servicios -->
-
-        <div class="servicio" data-precio="400" data-promocion="true">
-            <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
-            <p>$400.00/foto</p>
-            <div class="controles">
-                <select class="cantidad">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">Otra cantidad</option>
-                </select>
-                <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
+    <div class="categoria">
+        <h1 class="titulo-categoria">Diseño</h1>
+        <!-- Contenedor de servicios -->
+        <div class="contenedor-servicios">
+            <!-- Ejemplo de servicios -->
+            <div class="servicio" data-precio="400" data-promocion="true">
+                <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
+                <p>$400.00/foto</p>
+                <div class="controles">
+                    <select class="cantidad">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">Otra cantidad</option>
+                    </select>
+                    <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
+                </div>
             </div>
+            <!-- Ejemplo de servicios -->
         </div>
+        <!-- Contenedor de servicios -->
+    </div>
 
-        <div class="servicio" data-precio="400" data-promocion="true">
-            <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
-            <p>$400.00/foto</p>
-            <div class="controles">
-                <select class="cantidad">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">Otra cantidad</option>
-                </select>
-                <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
+
+
+    <div class="categoria">
+        <h1 class="titulo-categoria">Multimedia</h1>
+        <!-- Contenedor de servicios -->
+        <div class="contenedor-servicios">
+            <!-- Ejemplo de servicios -->
+            <div class="servicio" data-precio="400" data-promocion="true">
+                <h3>Esos</h3>
+                <p>$500.00/foto</p>
+                <div class="controles">
+                    <select class="cantidad">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">Otra cantidad</option>
+                    </select>
+                    <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
+                </div>
             </div>
+            <!-- Ejemplo de servicios -->
         </div>
-
-        <div class="servicio" data-precio="400" data-promocion="true">
-            <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
-            <p>$400.00/foto</p>
-            <div class="controles">
-                <select class="cantidad">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">Otra cantidad</option>
-                </select>
-                <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
-            </div>
-        </div>
-
-        <div class="servicio" data-precio="400" data-promocion="true">
-            <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
-            <p>$400.00/foto</p>
-            <div class="controles">
-                <select class="cantidad">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">Otra cantidad</option>
-                </select>
-                <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
-            </div>
-        </div>
-
-        <div class="servicio" data-precio="400" data-promocion="true">
-            <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
-            <p>$400.00/foto</p>
-            <div class="controles">
-                <select class="cantidad">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">Otra cantidad</option>
-                </select>
-                <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
-            </div>
-        </div>
-
-        <div class="servicio" data-precio="400" data-promocion="true">
-            <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
-            <p>$400.00/foto</p>
-            <div class="controles">
-                <select class="cantidad">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">Otra cantidad</option>
-                </select>
-                <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
-            </div>
-        </div>
-        
-        <div class="servicio" data-precio="400" data-promocion="true">
-            <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
-            <p>$400.00/foto</p>
-            <div class="controles">
-                <select class="cantidad">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">Otra cantidad</option>
-                </select>
-                <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
-            </div>
-        </div>
-
-        <!-- Ejemplo de servicios -->
-
+        <!-- Contenedor de servicios -->
     </div>
     
     <div id="resumen-compra" style="display:none;"></div>
@@ -385,15 +252,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             const botonContinuar = document.getElementById('continuar');
             const botonReiniciar = document.getElementById('reiniciar');
-            const contenedorServicios = document.getElementById('contenedor-servicios');
+            const contenedoresServicios = document.querySelectorAll('.contenedor-servicios');
             const resumenCompra = document.getElementById('resumen-compra');
             const botonesResumen = document.getElementById('botones-resumen');
-            const servicios = document.querySelectorAll('.servicio');
 
-            // Color verde en los contenedores
+            let servicioGlobalIndex = 0;  // Índice global para todos los servicios
+
             document.querySelectorAll('.servicio').forEach((servicio, index) => {
+                servicio.setAttribute('data-index', servicioGlobalIndex++);
                 const select = servicio.querySelector('.cantidad');
-                const valorGuardado = localStorage.getItem('servicio_' + index);
+                const valorGuardado = localStorage.getItem('servicio_' + servicio.getAttribute('data-index'));
 
                 if (valorGuardado && valorGuardado !== '0') {
                     servicio.classList.add('selected');
@@ -405,138 +273,141 @@
                     } else {
                         servicio.classList.remove('selected');
                     }
-
-                    // Guarda la selección en localStorage
-                    localStorage.setItem('servicio_' + index, this.value);
+                    localStorage.setItem('servicio_' + servicio.getAttribute('data-index'), this.value);
                 });
             });
 
+            contenedoresServicios.forEach((contenedor, contenedorIndex) => {
+                const servicios = contenedor.querySelectorAll('.servicio');
 
-            servicios.forEach((servicio, index) => {
-                const servicioId = 'servicio_' + index;
-                const select = servicio.querySelector('.cantidad');
-                let input = servicio.querySelector('.input-cantidad');
-    
-                if (!input) {
-                    input = document.createElement('input');
-                    input.type = 'number';
-                    input.classList.add('input-cantidad');
-                    input.style.width = '50px';
-                    input.style.display = 'none';
-                    input.min = 0;
-                    input.max = 99;
-                    servicio.appendChild(input);
-                }
-    
-                select.addEventListener('change', () => {
-                    if (select.value === '21') {
-                        input.style.display = 'inline-block';
-                        input.focus();
-                    } else {
+                servicios.forEach(servicio => {
+                    const servicioId = 'servicio_' + servicio.getAttribute('data-index');
+                    const select = servicio.querySelector('.cantidad');
+                    let input = servicio.querySelector('.input-cantidad');
+
+                    if (!input) {
+                        input = document.createElement('input');
+                        input.type = 'number';
+                        input.classList.add('input-cantidad');
+                        input.style.width = '50px';
                         input.style.display = 'none';
+                        input.min = 0;
+                        input.max = 99;
+                        servicio.appendChild(input);
                     }
-                    localStorage.setItem(servicioId, select.value);
-                });
-    
-                input.addEventListener('blur', () => {
-                    const num = parseInt(input.value);
-                    if (!isNaN(num) && num >= 0 && num <= 99) {
-                        const existsInSelect = Array.from(select.options).some(option => parseInt(option.value) === num);
-                        if (existsInSelect && num !== 21) { // Asegurarse de que el número no sea 21
-                            select.value = num.toString();  // Selecciona el valor en el select
-                            input.style.display = 'none';   // Oculta el campo de texto
-                        } else if (num === 21) {
-                            select.value = '21'; // Asegura que 21 se maneje correctamente
-                            input.style.display = 'inline-block'; // Mantiene visible el campo de texto
-                        }
-                        localStorage.setItem(servicioId + '_custom', input.value);
-                    }
-                });
-    
-                input.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        input.blur();
-                    }
-                });
-    
-                // Cargar valores guardados
-                const valorGuardado = localStorage.getItem(servicioId);
-                const valorGuardadoCustom = localStorage.getItem(servicioId + '_custom');
-                if (valorGuardado) {
-                    select.value = valorGuardado;
-                    if (valorGuardado === '21' && valorGuardadoCustom) {
-                        input.style.display = 'inline-block';
-                        input.value = valorGuardadoCustom;
-                    }
-                }
-            });
-    
-            function guardarSelecciones() {
-                servicios.forEach((servicio, index) => {
-                    const servicioId = 'servicio_' + index;
-                    const select = servicio.querySelector('.cantidad');
-                    const input = servicio.querySelector('.input-cantidad');
-                    localStorage.setItem(servicioId, select.value);
-                    if (select.value === '21') {
-                        localStorage.setItem(servicioId + '_custom', input.value);
-                    }
-                });
-            }
-    
-            function cargarSelecciones() {
-                servicios.forEach((servicio, index) => {
-                    const servicioId = 'servicio_' + index;
-                    const select = servicio.querySelector('.cantidad');
-                    const input = servicio.querySelector('.input-cantidad');
-                    const valorGuardado = localStorage.getItem(servicioId);
-                    const valorPersonalizado = localStorage.getItem(servicioId + '_custom');
 
+                    select.addEventListener('change', function() {
+                        if (this.value === '21') {
+                            input.style.display = 'inline-block';
+                            input.focus();
+                            select.style.width = '100%';
+                        } else {
+                            input.style.display = 'none';
+                            select.style.width = '100%';
+                        }
+                        localStorage.setItem(servicioId, this.value);
+                    });
+
+                    input.addEventListener('blur', () => {
+                        const num = parseInt(input.value);
+                        if (!isNaN(num) && num >= 0 && num <= 99) {
+                            const optionExists = [...select.options].some(option => option.value === num.toString());
+                            if (optionExists) {
+                                select.value = num.toString();
+                                input.style.display = 'none';
+                                select.style.width = '100%';
+                                localStorage.setItem(servicioId, num.toString());
+                            } else {
+                                localStorage.setItem(servicioId + '_custom', input.value);
+                            }
+                        } else if (input.value.trim() === '') {
+                            select.value = '0';
+                            input.style.display = 'none';
+                            select.style.width = '100%';
+                            localStorage.setItem(servicioId, '0');
+                            servicio.classList.remove('selected');
+                        }
+                    });
+
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            input.blur();
+                        }
+                    });
+
+                    const valorGuardado = localStorage.getItem(servicioId);
                     if (valorGuardado) {
                         select.value = valorGuardado;
                         if (valorGuardado === '21') {
-                            input.style.display = 'inline-block'; // Asegurarse de mostrar el campo de texto
-                            input.value = valorPersonalizado || ''; // Establecer el valor guardado o vacío si no hay nada guardado
+                            input.style.display = 'inline-block';
+                            const valorGuardadoCustom = localStorage.getItem(servicioId + '_custom');
+                            input.value = valorGuardadoCustom || '';
                         } else {
                             input.style.display = 'none';
                         }
+                        select.style.width = '100%'; // Asegurar que select esté al 100% al cargar
+                        if (valorGuardado !== '0' && valorGuardado !== '21') {
+                            servicio.classList.add('selected');
+                        } else {
+                            servicio.classList.remove('selected');
+                        }
+                    }
+                });
+            });
+
+
+
+            function guardarSelecciones() {
+                document.querySelectorAll('.servicio').forEach(servicio => {
+                    const servicioId = 'servicio_' + servicio.getAttribute('data-index');
+                    const select = servicio.querySelector('.cantidad');
+                    const input = servicio.querySelector('.input-cantidad');
+                    localStorage.setItem(servicioId, select.value);
+                    if (select.value === '21' && input.value) {
+                        localStorage.setItem(servicioId + '_custom', input.value);
                     }
                 });
             }
-    
+
             botonContinuar.addEventListener('click', () => {
                 guardarSelecciones();
                 localStorage.setItem('estadoPagina', 'resumen');
                 calcularResumen();
             });
-    
+
             botonReiniciar.addEventListener('click', () => {
-                const confirmado = confirm("Esto reiniciará el cotizador, borrando todas las selecciones actuales. ¿Deseas continuar?");
-                if (confirmado) {
+                if (confirm("Esto reiniciará el cotizador, borrando todas las selecciones actuales. ¿Deseas continuar?")) {
                     localStorage.clear();
                     location.reload();
                 }
             });
-    
+
             const estadoPagina = localStorage.getItem('estadoPagina');
             if (estadoPagina === 'resumen') {
                 mostrarResumen();
             } else {
                 cargarSelecciones();
             }
-    
+
             function calcularResumen() {
                 let total = 0;
                 let resumenHtml = "<h2>Resumen de Compra</h2>";
+                contenedoresServicios.forEach(contenedor => contenedor.style.display = 'none');
+
+                const tituloc = document.querySelectorAll('.titulo-categoria'); // Selecciona todos los contenedores de categorías
+                tituloc.forEach(titulo => titulo.style.display = 'none'); // Oculta cada contenedor de categoría
+
                 const formatter = new Intl.NumberFormat('en-US', {
                     style: 'decimal',
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                 });
 
-                servicios.forEach(servicio => {
+                document.querySelectorAll('.servicio').forEach(servicio => {
+                    const servicioId = 'servicio_' + servicio.getAttribute('data-index');
                     const select = servicio.querySelector('.cantidad');
                     const input = servicio.querySelector('.input-cantidad');
-                    let cantidad = select.value === '21' ? (input && input.style.display !== 'none' ? parseInt(input.value) || 0 : 0) : parseInt(select.value);
+                    let cantidad = select.value === '21' ? parseInt(localStorage.getItem(servicioId + '_custom') || 0) : parseInt(select.value);
                     const precio = parseInt(servicio.dataset.precio);
                     const nombre = servicio.querySelector('h3').textContent;
                     const tienePromocion = servicio.dataset.promocion === "true";
@@ -568,7 +439,6 @@
                 localStorage.setItem('resumenHtml', resumenHtml);
 
                 resumenCompra.innerHTML = resumenHtml;
-                contenedorServicios.style.display = 'none';
                 botonContinuar.style.display = 'none';
                 resumenCompra.style.display = 'block';
 
@@ -583,23 +453,52 @@
                 botonesResumen.style.display = 'block';
             }
 
-    
             function mostrarResumen() {
                 const resumenHtml = localStorage.getItem('resumenHtml');
+                
+                const categorias = document.querySelectorAll('.categoria'); // Selecciona todos los contenedores de categorías
+                categorias.forEach(categoria => categoria.style.display = 'none'); // Oculta cada contenedor de categoría
+
+                contenedoresServicios.forEach(contenedor => contenedor.style.display = 'none');
                 resumenCompra.innerHTML = resumenHtml || "<p>No hay datos de resumen disponibles.</p>";
-                contenedorServicios.style.display = 'none';
                 botonContinuar.style.display = 'none';
                 resumenCompra.style.display = 'block';
+
                 botonesResumen.innerHTML = '<button id="volver">Atrás</button>';
                 const volverBtn = document.getElementById('volver');
                 volverBtn.addEventListener('click', () => {
                     localStorage.removeItem('estadoPagina');
                     location.reload();
                 });
+
                 botonesResumen.appendChild(botonReiniciar);
                 botonesResumen.style.display = 'block';
+            }
+
+            function cargarSelecciones() {
+                const tituloc = document.querySelectorAll('.titulo-categoria'); // Selecciona todos los contenedores de categorías
+                tituloc.forEach(titulo => titulo.style.display = 'block'); // Oculta cada contenedor de categoría
+
+                document.querySelectorAll('.servicio').forEach(servicio => {
+                    const servicioId = 'servicio_' + servicio.getAttribute('data-index');
+                    const select = servicio.querySelector('.cantidad');
+                    const input = servicio.querySelector('.input-cantidad');
+                    const valorGuardado = localStorage.getItem(servicioId);
+                    const valorPersonalizado = localStorage.getItem(servicioId + '_custom');
+
+                    if (valorGuardado) {
+                        select.value = valorGuardado;
+                        if (valorGuardado === '21') {
+                            input.style.display = 'inline-block';
+                            input.value = valorPersonalizado || '';
+                        } else {
+                            input.style.display = 'none';
+                        }
+                    }
+                });
             }
         });
     </script>
 </body>
 </html>
+
