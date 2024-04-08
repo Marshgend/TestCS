@@ -333,6 +333,13 @@
                         }
                     });
 
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            input.blur();
+                        }
+                    });
+        
+
                     const valorGuardado = localStorage.getItem(servicioId);
                     if (valorGuardado) {
                         select.value = valorGuardado;
