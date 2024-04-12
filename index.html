@@ -1,507 +1,1769 @@
 <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style id="preview-style">
+      body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    text-align: center;
+    padding: 20px;
+    max-width: 960px;
+    margin: 20px auto;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+/* Estilos para el menú desplegable y botones */
+select {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 2px solid #4CAF50;
+    font-size: 16px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    width: 60%;
+}
+
+button {
+    padding: 12px 25px;
+    border-radius: 5px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+/* Estilos para el resumen de menú y lista de compras */
+.contenedor-resumen, .lista-de-compras {
+    background-color: #e8f5e9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+}
+
+.tarjeta-categoria, .lista-de-compras li {
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin-bottom: 8px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    border-left: 3px solid #4CAF50;
+    list-style-type: none; /* Elimina bullet points */
+}
+
+.espacio-entre-platillos {
+    margin-top: 35px; /* Añade un espacio adicional entre platillos */
+}
+
+.platillo strong + ul {
+    margin-top: 10px; /* Espacio entre el título del platillo y la lista de ingredientes */
+}
+
+.tarjeta-categoria h3 {
+    color: #4CAF50;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.tarjeta-categoria ul {
+    list-style-type: none; /* Quitamos los bullet points */
+    padding: 0;
+    margin: 0;
+}
+
+.tarjeta-categoria li {
+    border-bottom: 1px solid #e0e0e0; /* Línea para separar los ingredientes */
+    padding-bottom: 8px; /* Espacio debajo de cada ingrediente */
+    margin-bottom: 8px; /* Espacio entre ingredientes */
+}
+
+.tarjeta-categoria li:last-child {
+    border-bottom: none; /* El último ingrediente no tiene borde inferior */
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+/* Estilos para elementos de la lista de la compra */
+.lista-de-compras li {
+    border-bottom: 1px solid #e0e0e0; /* Línea para separar los ítems */
+    padding-bottom: 8px; /* Espacio debajo de cada ítem */
+    margin-bottom: 8px; /* Espacio entre ítems */
+}
+
+.lista-de-compras li:last-child {
+    border-bottom: none; /* El último ítem no tiene borde inferior */
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+/* Ajustes de responsividad para dispositivos móviles */
+@media (max-width: 768px) {
+    select, button {
+        width: 90%;
+        margin-bottom: 15px;
+    }
+    .contenedor-resumen, .lista-de-compras {
+        box-shadow: none; /* Sombras desactivadas para móviles */
+    }
+}
+    </style>
+    
+  </head>
+  <body>
+    <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+  <body>
+    <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />   
+  </head>
+  <body>
+    <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Cotizador de Servicios</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 50px 5vw; /* Márgenes dinámicos */
-            padding-bottom: 25px;
-        }
-
-        .contenedor-servicios {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start; /* Alineación a la izquierda */
-        }
-    
-        .servicio {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            margin: 10px;
-            padding: 25px;
-            width: calc(25% - 20px); /* Tres tarjetas por fila en pantallas grandes */
-            box-sizing: border-box;
-            border-radius: 10px;
-            background-color: #f0f0f0;
-        }
-    
-        .servicio.selected {
-            background-color: #e2f8cd;
-        }
-    
-        .servicio .controles {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-    
-        .servicio .controles select,
-        .servicio .controles .input-cantidad {
-            font-size: 16px;
-            border-radius: 5px;
-            padding: 8px;
-        }
-    
-        .servicio .controles select {
-            width: 100%; /* Cambiado de 70% a 100% */
-        }
-    
-        .servicio .controles .input-cantidad {
-            width: 30%;
-            display: none;
-            margin-left: 10px;
-        }
-    
-        .servicio h3 {
-            margin: 0;
-            margin-bottom: 0.5em;
-            font-size: 18px;
-        }
-    
-        .servicio p {
-            font-size: 16px;
-        }
-    
-        #botones, #botones-resumen {
-            margin: 20px 0;
-            text-align: center;
-        }
-    
-        button {
-            margin: 10px;
-            padding: 15px 25px;
-            border-radius: 8px;
-            font-size: 18px;
-            border: none;
-            transition: background-color 0.2s;
-        }
-    
-        #continuar {
-            background-color: #73c034;
-            color: white;
-        }
-    
-        #continuar:hover {
-            background-color: #45a049;
-        }
-    
-        #reiniciar {
-            background-color: #ec6259;
-            color: white;
-        }
-    
-        #reiniciar:hover {
-            background-color: #d32f2f;
-        }
-    
-        #volver {
-            background-color: #ffcc80;
-        }
-    
-        #resumen-compra {
-            font-size: 18px;
-        }
-    
-        .resumen-servicio {
-            background-color: #fff6dc;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        
-        @media (max-width: 1450px) {
-            .servicio {
-                width: calc(33.33% - 20px); /* Tres tarjetas por fila */
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .servicio {
-                width: calc(50% - 20px); /* Dos tarjetas por fila en pantallas medianas */
-            }
-        }
-    
-        @media (max-width: 768px) {
-            body {
-                padding: 50px 2vw; /* Menos margen para pantallas pequeñas */
-            }
-    
-            .servicio {
-                width: 100%; /* Una tarjeta por fila en pantallas pequeñas */
-            }
-    
-            #resumen-compra {
-                font-size: 16px; /* Tamaño de fuente ajustado para el resumen en pantallas pequeñas */
-            }
-    
-            .servicio h3, .servicio p, button {
-                font-size: 16px; /* Tamaño de fuente ajustado para elementos en pantallas pequeñas */
-            }
-    
-            button {
-                padding: 12px 20px;
-            }
-        }
-    </style>
-    
-
+    <title>Menú Nutricional</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="categoria">
-        <h1 class="titulo-categoria">Diseño</h1>
-        <!-- Contenedor de servicios -->
-        <div class="contenedor-servicios">
-            <!-- Ejemplo de servicios -->
-            <div class="servicio" data-precio="400" data-promocion="true">
-                <h3>Fotografía de Producto Conceptual (mínimo 5)</h3>
-                <p>$400.00/foto</p>
-                <div class="controles">
-                    <select class="cantidad">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21_custom">Otra cantidad</option>
-                    </select>
-                    <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
-                </div>
-            </div>
-            <!-- Ejemplo de servicios -->
-        </div>
-        <!-- Contenedor de servicios -->
+    <div id="app">
+        <h1>Elige tu Menú Nutricional</h1>
+        <div id="menu-container"></div>
     </div>
-
-
-
-    <div class="categoria">
-        <h1 class="titulo-categoria">Multimedia</h1>
-        <!-- Contenedor de servicios -->
-        <div class="contenedor-servicios">
-            <!-- Ejemplo de servicios -->
-            <div class="servicio" data-precio="400" data-promocion="true">
-                <h3>Esos</h3>
-                <p>$500.00/foto</p>
-                <div class="controles">
-                    <select class="cantidad">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21_custom">Otra cantidad</option>
-                    </select>
-                    <input type="number" class="input-cantidad" style="display: none;" min="0" max="99">
-                </div>
-            </div>
-            <!-- Ejemplo de servicios -->
-        </div>
-        <!-- Contenedor de servicios -->
-    </div>
-    
-    <div id="resumen-compra" style="display:none;"></div>
-
-    <div id="botones">
-        <button id="continuar">Continuar</button>
-        <button id="reiniciar">Reiniciar</button>
-    </div>
-    
-    <div id="botones-resumen" style="display:none;">
-        
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const botonContinuar = document.getElementById('continuar');
-            const botonReiniciar = document.getElementById('reiniciar');
-            const contenedoresServicios = document.querySelectorAll('.contenedor-servicios');
-            const resumenCompra = document.getElementById('resumen-compra');
-            const botonesResumen = document.getElementById('botones-resumen');
-
-            let servicioGlobalIndex = 0;  // Índice global para todos los servicios
-
-            document.querySelectorAll('.servicio').forEach((servicio, index) => {
-                servicio.setAttribute('data-index', servicioGlobalIndex++);
-                const select = servicio.querySelector('.cantidad');
-                const valorGuardado = localStorage.getItem('servicio_' + servicio.getAttribute('data-index'));
-
-                if (valorGuardado && valorGuardado !== '0') {
-                    servicio.classList.add('selected');
-                }
-
-                select.addEventListener('change', function() {
-                    if (this.value !== '0') {
-                        servicio.classList.add('selected');
-                    } else {
-                        servicio.classList.remove('selected');
-                    }
-                    localStorage.setItem('servicio_' + servicio.getAttribute('data-index'), this.value);
-                });
-            });
-
-            contenedoresServicios.forEach((contenedor, contenedorIndex) => {
-                const servicios = contenedor.querySelectorAll('.servicio');
-
-                servicios.forEach(servicio => {
-                    const servicioId = 'servicio_' + servicio.getAttribute('data-index');
-                    const select = servicio.querySelector('.cantidad');
-                    let input = servicio.querySelector('.input-cantidad');
-
-                    if (!input) {
-                        input = document.createElement('input');
-                        input.type = 'number';
-                        input.classList.add('input-cantidad');
-                        input.style.width = '50px';
-                        input.style.display = 'none';
-                        input.min = 0;
-                        input.max = 99;
-                        servicio.appendChild(input);
-                    }
-
-                    select.addEventListener('change', function() {
-                        if (this.value === '21_custom') {
-                            input.style.display = 'inline-block';
-                            input.focus();
-                            select.style.width = '100%';
-                        } else {
-                            input.style.display = 'none';
-                            select.style.width = '100%';
-                        }
-                        localStorage.setItem(servicioId, this.value);
-                    });
-
-
-                    input.addEventListener('blur', () => {
-                        const num = parseInt(input.value);
-                        if (!isNaN(num) && num >= 0 && num <= 99) {
-                            const optionExists = [...select.options].some(option => option.value === num.toString());
-                            if (optionExists) {
-                                select.value = num.toString();
-                                input.style.display = 'none';
-                                select.style.width = '100%';
-                                localStorage.setItem(servicioId, num.toString());
-                                if (num === 0) {
-                                    servicio.classList.remove('selected');
-                                }
-                            } else {
-                                localStorage.setItem(servicioId + '_custom', input.value);
-                            }
-                        } else if (input.value.trim() === '') {
-                            select.value = '0';
-                            input.style.display = 'none';
-                            select.style.width = '100%';
-                            localStorage.setItem(servicioId, '0');
-                            servicio.classList.remove('selected');
-                        }
-                    });
-
-                    input.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter') {
-                            input.blur();
-                        }
-                    });
-        
-
-                    const valorGuardado = localStorage.getItem(servicioId);
-                    if (valorGuardado) {
-                        select.value = valorGuardado;
-                        if (valorGuardado === '21_custom') {
-                            input.style.display = 'inline-block';
-                            const valorGuardadoCustom = localStorage.getItem(servicioId + '_custom');
-                            input.value = valorGuardadoCustom || '';
-                        } else {
-                            input.style.display = 'none';
-                        }
-                        select.style.width = '100%'; // Asegurar que select esté al 100% al cargar
-                        if (valorGuardado !== '0' && valorGuardado !== '21') {
-                            servicio.classList.add('selected');
-                        } else {
-                            servicio.classList.remove('selected');
-                        }
-                    }
-                });
-            });
-
-            function guardarSelecciones() {
-                document.querySelectorAll('.servicio').forEach(servicio => {
-                    const servicioId = 'servicio_' + servicio.getAttribute('data-index');
-                    const select = servicio.querySelector('.cantidad');
-                    const input = servicio.querySelector('.input-cantidad');
-                    localStorage.setItem(servicioId, select.value);
-                    if (select.value === '21' && input.value) {
-                        localStorage.setItem(servicioId + '_custom', input.value);
-                    }
-                });
-            }
-
-            botonContinuar.addEventListener('click', () => {
-                guardarSelecciones();
-                localStorage.setItem('estadoPagina', 'resumen');
-                calcularResumen();
-            });
-
-            botonReiniciar.addEventListener('click', () => {
-                if (confirm("Esto reiniciará el cotizador, borrando todas las selecciones actuales. ¿Deseas continuar?")) {
-                    localStorage.clear();
-                    location.reload();
-                }
-            });
-
-            const estadoPagina = localStorage.getItem('estadoPagina');
-            if (estadoPagina === 'resumen') {
-                mostrarResumen();
-            } else {
-                cargarSelecciones();
-            }
-
-            function calcularResumen() {
-                let total = 0;
-                let resumenHtml = "<h2>Resumen de Compra</h2>";
-                contenedoresServicios.forEach(contenedor => contenedor.style.display = 'none');
-
-                const tituloc = document.querySelectorAll('.titulo-categoria'); // Selecciona todos los contenedores de categorías
-                tituloc.forEach(titulo => titulo.style.display = 'none'); // Oculta cada contenedor de categoría
-
-                const formatter = new Intl.NumberFormat('en-US', {
-                    style: 'decimal',
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                });
-
-                document.querySelectorAll('.servicio').forEach(servicio => {
-                    const servicioId = 'servicio_' + servicio.getAttribute('data-index');
-                    const select = servicio.querySelector('.cantidad');
-                    const input = servicio.querySelector('.input-cantidad');
-                    let cantidad = select.value === '21_custom' ? parseInt(localStorage.getItem(servicioId + '_custom') || 0) : parseInt(select.value);
-                    const precio = parseInt(servicio.dataset.precio);
-                    const nombre = servicio.querySelector('h3').textContent;
-                    const tienePromocion = servicio.dataset.promocion === "true";
-
-                    let subtotal = 0;
-                    if (cantidad > 0) {
-                        if (tienePromocion && cantidad > 10) {
-                            const cantidadSinDescuento = 10;
-                            const cantidadConDescuento = cantidad - 10;
-                            const precioConDescuento = precio * 0.7;
-                            subtotal = (cantidadSinDescuento * precio) + (cantidadConDescuento * precioConDescuento);
-                            resumenHtml += `<div class="resumen-servicio"><p>${nombre} (${formatter.format(precio)} por unidad) x ${cantidadSinDescuento} = ${formatter.format(cantidadSinDescuento * precio)}</p>`;
-                            resumenHtml += `<p>${nombre} (${formatter.format(precioConDescuento)} por unidad con descuento) x ${cantidadConDescuento} = ${formatter.format(cantidadConDescuento * precioConDescuento)}</p></div>`;
-                        } else {
-                            subtotal = cantidad * precio;
-                            resumenHtml += `<div class="resumen-servicio"><p>${nombre} (${formatter.format(precio)} por unidad) x ${cantidad} = ${formatter.format(subtotal)}</p></div>`;
-                        }
-                        total += subtotal;
-                    }
-                });
-
-                const iva = total * 0.16;
-                const totalConIVA = total + iva;
-
-                resumenHtml += `<h3>Total: ${formatter.format(total)}</h3>`;
-                resumenHtml += `<p>IVA (16%): ${formatter.format(iva)}</p>`;
-                resumenHtml += `<h3>Total con IVA: ${formatter.format(totalConIVA)}</h3>`;
-
-                localStorage.setItem('resumenHtml', resumenHtml);
-
-                resumenCompra.innerHTML = resumenHtml;
-                botonContinuar.style.display = 'none';
-                resumenCompra.style.display = 'block';
-
-                botonesResumen.innerHTML = '<button id="volver">Atrás</button>';
-                const volverBtn = document.getElementById('volver');
-                volverBtn.addEventListener('click', () => {
-                    localStorage.removeItem('estadoPagina');
-                    location.reload();
-                });
-
-                botonesResumen.appendChild(botonReiniciar);
-                botonesResumen.style.display = 'block';
-            }
-
-            function mostrarResumen() {
-                const resumenHtml = localStorage.getItem('resumenHtml');
-                
-                const categorias = document.querySelectorAll('.categoria'); // Selecciona todos los contenedores de categorías
-                categorias.forEach(categoria => categoria.style.display = 'none'); // Oculta cada contenedor de categoría
-
-                contenedoresServicios.forEach(contenedor => contenedor.style.display = 'none');
-                resumenCompra.innerHTML = resumenHtml || "<p>No hay datos de resumen disponibles.</p>";
-                botonContinuar.style.display = 'none';
-                resumenCompra.style.display = 'block';
-
-                botonesResumen.innerHTML = '<button id="volver">Atrás</button>';
-                const volverBtn = document.getElementById('volver');
-                volverBtn.addEventListener('click', () => {
-                    localStorage.removeItem('estadoPagina');
-                    location.reload();
-                });
-
-                botonesResumen.appendChild(botonReiniciar);
-                botonesResumen.style.display = 'block';
-            }
-
-            function cargarSelecciones() {
-                const tituloc = document.querySelectorAll('.titulo-categoria'); // Selecciona todos los contenedores de categorías
-                tituloc.forEach(titulo => titulo.style.display = 'block'); // Oculta cada contenedor de categoría
-
-                document.querySelectorAll('.servicio').forEach(servicio => {
-                    const servicioId = 'servicio_' + servicio.getAttribute('data-index');
-                    const select = servicio.querySelector('.cantidad');
-                    const input = servicio.querySelector('.input-cantidad');
-                    const valorGuardado = localStorage.getItem(servicioId);
-                    const valorPersonalizado = localStorage.getItem(servicioId + '_custom');
-
-                    if (valorGuardado) {
-                        select.value = valorGuardado;
-                        if (valorGuardado === '21_custom') {
-                            input.style.display = 'inline-block';
-                            input.value = valorPersonalizado || '';
-                        } else {
-                            input.style.display = 'none';
-                        }
-                    }
-                });
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
+  </body>
+</html>
+  </body>
+</html>
+    <script type="module">
+    const menuData = [
+    {
+        "categoria": "Desayuno",
+        "platillos": [
+            {
+                "nombre": "Sandwich de Pollo",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Pollo",
+                        "cantidad": 60.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Pan",
+                        "cantidad": 43.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "pieza"
+                    },
+                    {
+                        "ingrediente": "Pepino",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.3,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Jitomate",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 3.0,
+                        "unidad_alternativa": "rebanadas"
+                    },
+                    {
+                        "ingrediente": "Alfalfa",
+                        "cantidad": 10.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.3,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Mostaza",
+                        "cantidad": 3.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Panela",
+                        "cantidad": 40.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "rebanada"
+                    }
+                ]
+            },
+            {
+                "nombre": "Jugo Verde",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Agua",
+                        "cantidad": 180.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Espinaca",
+                        "cantidad": 35.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Manzana",
+                        "cantidad": 50.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Pepino",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.25,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Limón",
+                        "cantidad": 10.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Piña",
+                        "cantidad": 76.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Snack",
+        "platillos": [
+            {
+                "nombre": "Gelatina de Coco",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Leche",
+                        "cantidad": 240.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Grenetina",
+                        "cantidad": 7.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.7,
+                        "unidad_alternativa": "cucharadas"
+                    },
+                    {
+                        "ingrediente": "Coco",
+                        "cantidad": 5.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "cucharadita"
+                    },
+                    {
+                        "ingrediente": "Stevia",
+                        "cantidad": 1.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Vainilla",
+                        "cantidad": 1.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.2,
+                        "unidad_alternativa": "cucharaditas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Comida",
+        "platillos": [
+            {
+                "nombre": "Pastel Azteca",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Pollo",
+                        "cantidad": 150.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Cebolla",
+                        "cantidad": 27.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Jitomate",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Ajo",
+                        "cantidad": 1.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.25,
+                        "unidad_alternativa": "cucharaditas"
+                    },
+                    {
+                        "ingrediente": "Aceite",
+                        "cantidad": 5.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "cucharadita"
+                    },
+                    {
+                        "ingrediente": "Oaxaca",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "rebanada"
+                    },
+                    {
+                        "ingrediente": "Crema",
+                        "cantidad": 13.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "cucharada"
+                    },
+                    {
+                        "ingrediente": "Tortillas",
+                        "cantidad": 48.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 4.0,
+                        "unidad_alternativa": "piezas"
+                    }
+                ]
+            },
+            {
+                "nombre": "Guarnición",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Lechuga",
+                        "cantidad": 135.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 3.0,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Pepino",
+                        "cantidad": 25.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.25,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Zanahoria",
+                        "cantidad": null,
+                        "unidad": "g",
+                        "cantidad_alternativa": 3.0,
+                        "unidad_alternativa": "tazas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Snack",
+        "platillos": [
+            {
+                "nombre": "Chocolate Caliente",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Leche",
+                        "cantidad": 125.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Canela",
+                        "cantidad": 5.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.7,
+                        "unidad_alternativa": "cucharaditas"
+                    },
+                    {
+                        "ingrediente": "Cacao",
+                        "cantidad": 10.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 2.0,
+                        "unidad_alternativa": "cucharadas"
+                    },
+                    {
+                        "ingrediente": "Leche",
+                        "cantidad": 122.5,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    }
+                ]
+            },
+            {
+                "nombre": "Miel Maple",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Miel",
+                        "cantidad": 15.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "cucharada"
+                    }
+                ]
+            },
+            {
+                "nombre": "Mug Cake de Zanahoria",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Avena",
+                        "cantidad": 10.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.1,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Leche",
+                        "cantidad": 37.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Huevo",
+                        "cantidad": 50.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Zanahoria",
+                        "cantidad": 20.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.25,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Plátano",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.25,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Yogurt",
+                        "cantidad": 32.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 0.1,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Mantequilla de maní",
+                        "cantidad": 7.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "cucharadita"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Cena",
+        "platillos": [
+            {
+                "nombre": "Ensalada Navideña Fit",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Manzana",
+                        "cantidad": 53.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Lechuga",
+                        "cantidad": 22.5,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Yogurt",
+                        "cantidad": 60.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 0.25,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Arándanos",
+                        "cantidad": 15.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.5,
+                        "unidad_alternativa": "cucharadas"
+                    },
+                    {
+                        "ingrediente": "Nueces",
+                        "cantidad": 4.5,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.5,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Pollo",
+                        "cantidad": 90.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Desayuno",
+        "platillos": [
+            {
+                "nombre": "Jugo Verde",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Mandarina",
+                        "cantidad": 64.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Guayaba",
+                        "cantidad": 32.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Espinaca",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Nopales",
+                        "cantidad": 34.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Pepino",
+                        "cantidad": 26.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.25,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Agua",
+                        "cantidad": 100.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    }
+                ]
+            },
+            {
+                "nombre": "Huevo a la Mexicana",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Huevo",
+                        "cantidad": 50.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Jitomate",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 3.0,
+                        "unidad_alternativa": "rebanadas"
+                    },
+                    {
+                        "ingrediente": "Jalapeño",
+                        "cantidad": 15.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Cebolla",
+                        "cantidad": 10.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 2.0,
+                        "unidad_alternativa": "cucharadas"
+                    },
+                    {
+                        "ingrediente": "Claras",
+                        "cantidad": 132.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 4.0,
+                        "unidad_alternativa": "piezas"
+                    }
+                ]
+            },
+            {
+                "nombre": "Rice Cake con Maní y Mermelada",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Pan",
+                        "cantidad": 8.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "unidad comercial"
+                    },
+                    {
+                        "ingrediente": "Mantequilla de maní",
+                        "cantidad": 7.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "cucharadita"
+                    },
+                    {
+                        "ingrediente": "Mermelada",
+                        "cantidad": 7.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "cucharada"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Snack",
+        "platillos": [
+            {
+                "nombre": "Cacahuates",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Cacahuates",
+                        "cantidad": 12.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 12.0,
+                        "unidad_alternativa": "piezas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Snack",
+        "platillos": [
+            {
+                "nombre": "Tiramisú",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Marías",
+                        "cantidad": 20.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 5.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Yogurt",
+                        "cantidad": 73.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Café",
+                        "cantidad": 75.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 0.3,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Vainilla",
+                        "cantidad": 4.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Cottage",
+                        "cantidad": 40.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 2.5,
+                        "unidad_alternativa": "cucharaditas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Cena",
+        "platillos": [
+            {
+                "nombre": "Licuado de Manzana y Avena",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Manzana",
+                        "cantidad": 106.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "pieza"
+                    },
+                    {
+                        "ingrediente": "Avena",
+                        "cantidad": 10.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.1,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Vainilla",
+                        "cantidad": 5.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "cucharadita"
+                    },
+                    {
+                        "ingrediente": "Leche",
+                        "cantidad": 245.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "tazas"
+                    }
+                ]
+            },
+            {
+                "nombre": "Wrap",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Tortillas",
+                        "cantidad": 128.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 2.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Lechuga",
+                        "cantidad": 70.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Jitomate",
+                        "cantidad": 70.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Requesón",
+                        "cantidad": 50.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Pepino",
+                        "cantidad": 52.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Pollo",
+                        "cantidad": 90.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Desayuno",
+        "platillos": [
+            {
+                "nombre": "Jugo Verde de Piña y Nopal",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Agua",
+                        "cantidad": 150.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Piña",
+                        "cantidad": 76.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Nopales",
+                        "cantidad": 33.5,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Espinaca",
+                        "cantidad": 20.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.3,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Limón",
+                        "cantidad": 10.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    }
+                ]
+            },
+            {
+                "nombre": "Café Negro",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Agua",
+                        "cantidad": 240.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Stevia",
+                        "cantidad": 1.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "piezas"
+                    }
+                ]
+            },
+            {
+                "nombre": "Huevos con Verduras y Panela",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Verduras",
+                        "cantidad": 35.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Panela",
+                        "cantidad": 40.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "rebanada"
+                    },
+                    {
+                        "ingrediente": "Ajo",
+                        "cantidad": 1.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.3,
+                        "unidad_alternativa": "cucharaditas"
+                    },
+                    {
+                        "ingrediente": "Aceite",
+                        "cantidad": 3.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Claras",
+                        "cantidad": 132.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 4.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Tortillas",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "pieza"
+                    }
+                ]
+            },
+            {
+                "nombre": "Frijoles",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Frijoles",
+                        "cantidad": 112.5,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Snack",
+        "platillos": [
+            {
+                "nombre": "Mandarina",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Mandarina",
+                        "cantidad": 64.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "pieza"
+                    }
+                ]
+            },
+            {
+                "nombre": "Cacahuates",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Cacahuates",
+                        "cantidad": 12.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 12.0,
+                        "unidad_alternativa": "piezas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Comida",
+        "platillos": [
+            {
+                "nombre": "Ensalada Navideña",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Piña",
+                        "cantidad": 71.25,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Manzana",
+                        "cantidad": 53.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Zanahoria",
+                        "cantidad": 40.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Lechuga",
+                        "cantidad": 20.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Apio",
+                        "cantidad": 20.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.2,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Cerezas",
+                        "cantidad": 44.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 10.0,
+                        "unidad_alternativa": "piezas"
+                    }
+                ]
+            },
+            {
+                "nombre": "Vinagreta Miel Mostaza",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Mostaza",
+                        "cantidad": 15.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.1,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Miel",
+                        "cantidad": 14.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 2.0,
+                        "unidad_alternativa": "cucharaditas"
+                    },
+                    {
+                        "ingrediente": "Aceite",
+                        "cantidad": 5.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "cucharadita"
+                    },
+                    {
+                        "ingrediente": "Ajo",
+                        "cantidad": 5.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.3,
+                        "unidad_alternativa": "cucharaditas"
+                    },
+                    {
+                        "ingrediente": "Vinagre",
+                        "cantidad": 3.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Pimienta",
+                        "cantidad": 3.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.3,
+                        "unidad_alternativa": "cucharadita"
+                    }
+                ]
+            },
+            {
+                "nombre": "Agua de Jamaica",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Jamaica",
+                        "cantidad": 300.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Stevia",
+                        "cantidad": 1.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "piezas"
+                    }
+                ]
+            },
+            {
+                "nombre": "Pechuga Hawaiana",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Piña",
+                        "cantidad": 71.43,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Pollo",
+                        "cantidad": 180.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Jamón",
+                        "cantidad": 42.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 2.0,
+                        "unidad_alternativa": "rebanadas"
+                    },
+                    {
+                        "ingrediente": "Oaxaca",
+                        "cantidad": 20.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.7,
+                        "unidad_alternativa": "rebanada"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Snack",
+        "platillos": [
+            {
+                "nombre": "Yogurt",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Yogurt",
+                        "cantidad": 120.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "unidad comercial"
+                    }
+                ]
+            },
+            {
+                "nombre": "Marías",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Marías",
+                        "cantidad": 12.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 3.0,
+                        "unidad_alternativa": "piezas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Cena",
+        "platillos": [
+            {
+                "nombre": "Quesadillas con Pechuga",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Tortillas",
+                        "cantidad": 60.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 2.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Pollo",
+                        "cantidad": 90.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Oaxaca",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "rebanada"
+                    },
+                    {
+                        "ingrediente": "Salsa",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 2.0,
+                        "unidad_alternativa": "cucharadas"
+                    }
+                ]
+            },
+            {
+                "nombre": "Pico de Gallo",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Jitomate",
+                        "cantidad": 30.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 3.0,
+                        "unidad_alternativa": "rebanadas"
+                    },
+                    {
+                        "ingrediente": "Cebolla",
+                        "cantidad": 20.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 4.0,
+                        "unidad_alternativa": "cucharadas"
+                    },
+                    {
+                        "ingrediente": "Serrano",
+                        "cantidad": 10.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Cilantro",
+                        "cantidad": 10.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.2,
+                        "unidad_alternativa": "tazas"
+                    }
+                ]
+            },
+            {
+                "nombre": "Helado de Chocolate",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Chocolate",
+                        "cantidad": 61.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "vaso pequeño"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Desayuno",
+        "platillos": [
+            {
+                "nombre": "Licuado de Plátano",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Plátano",
+                        "cantidad": 60.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Canela",
+                        "cantidad": 5.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Vainilla",
+                        "cantidad": 5.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Espinaca",
+                        "cantidad": 60.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Leche",
+                        "cantidad": 240.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Avena",
+                        "cantidad": 5.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.1,
+                        "unidad_alternativa": "tazas"
+                    }
+                ]
+            },
+            {
+                "nombre": "Sándwich de Queso Panela",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Pan",
+                        "cantidad": 55.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 2.0,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Panela",
+                        "cantidad": 40.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "rebanada"
+                    },
+                    {
+                        "ingrediente": "Jamón",
+                        "cantidad": 54.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 3.0,
+                        "unidad_alternativa": "rebanadas"
+                    },
+                    {
+                        "ingrediente": "Lechuga",
+                        "cantidad": 15.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.3,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Aguacate",
+                        "cantidad": 25.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.25,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Jitomate",
+                        "cantidad": 20.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    }
+                ]
+            },
+            {
+                "nombre": "Café Negro",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Agua",
+                        "cantidad": 240.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "tazas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Snack",
+        "platillos": [
+            {
+                "nombre": "Atún con Ensalada de Verduras",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Atún",
+                        "cantidad": 90.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "lata"
+                    },
+                    {
+                        "ingrediente": "Chícharo",
+                        "cantidad": 10.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.1,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Elote",
+                        "cantidad": 10.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.1,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Papa",
+                        "cantidad": 10.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.1,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Zanahoria",
+                        "cantidad": 10.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.1,
+                        "unidad_alternativa": "tazas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Comida",
+        "platillos": [
+            {
+                "nombre": "Alambre",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Pimiento",
+                        "cantidad": 38.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Champiñón",
+                        "cantidad": 45.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Cebolla",
+                        "cantidad": 16.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Brócoli",
+                        "cantidad": 70.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "tazas"
+                    }
+                ]
+            },
+            {
+                "nombre": "Salsa de Soja con Bola de Res",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Salsa de soya",
+                        "cantidad": 8.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.7,
+                        "unidad_alternativa": "cucharaditas"
+                    },
+                    {
+                        "ingrediente": "Bola de res",
+                        "cantidad": 150.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Oaxaca",
+                        "cantidad": 45.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.5,
+                        "unidad_alternativa": "rebanadas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Snack",
+        "platillos": [
+            {
+                "nombre": "Ponche Navideño",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Agua",
+                        "cantidad": 100.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    },
+                    {
+                        "ingrediente": "Manzana",
+                        "cantidad": 27.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.3,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Guayaba",
+                        "cantidad": 16.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Tamarindo",
+                        "cantidad": 5.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.1,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Jamaica",
+                        "cantidad": 3.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.3,
+                        "unidad_alternativa": "cucharadas"
+                    },
+                    {
+                        "ingrediente": "Stevia",
+                        "cantidad": 2.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "cucharadita"
+                    },
+                    {
+                        "ingrediente": "Canela",
+                        "cantidad": 1.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    }
+                ]
+            },
+            {
+                "nombre": "Galletas Marías",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Marías",
+                        "cantidad": 20.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 5.0,
+                        "unidad_alternativa": "piezas"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoria": "Cena",
+        "platillos": [
+            {
+                "nombre": "Sopa Fría",
+                "ingredientes": [
+                    {
+                        "ingrediente": "Pasta",
+                        "cantidad": 60.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "tazas"
+                    },
+                    {
+                        "ingrediente": "Manzana",
+                        "cantidad": 53.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "piezas"
+                    },
+                    {
+                        "ingrediente": "Jamón",
+                        "cantidad": 36.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 2.0,
+                        "unidad_alternativa": "rebanadas"
+                    },
+                    {
+                        "ingrediente": "Panela",
+                        "cantidad": 20.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 0.5,
+                        "unidad_alternativa": "rebanada"
+                    },
+                    {
+                        "ingrediente": "Crema",
+                        "cantidad": 15.0,
+                        "unidad": "ml",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "cucharada"
+                    },
+                    {
+                        "ingrediente": "Mayonesa",
+                        "cantidad": 6.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": 1.0,
+                        "unidad_alternativa": "cucharadita"
+                    },
+                    {
+                        "ingrediente": "Pollo",
+                        "cantidad": 100.0,
+                        "unidad": "g",
+                        "cantidad_alternativa": null,
+                        "unidad_alternativa": null
+                    }
+                ]
+            }
+        ]
+    }
+]; // Asegúrate de que 'menuData' contenga la estructura de datos correspondiente
 
+let seleccion = {};
+let diasPorMenu = {};
+let menusSeleccionados = 0;
+let categoriaActual = "Desayuno";
+let categorias = ["Desayuno", "Snack", "Comida", "Snack", "Cena"];
+let indiceCategoriaActual = 0;
+
+function normalizarIngrediente(ingrediente) {
+    return ingrediente
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/s$/, '') // Elimina la 's' al final para normalizar plurales
+        .replace(/^\w/, (c) => c.toUpperCase()); // Capitaliza la primera letra
+}
+
+function displayDropdownCategorias() {
+    const container = document.getElementById('menu-container');
+    container.innerHTML = `<h2>Elige tu opción de ${categoriaActual}</h2>`;
+    
+    const dropdown = document.createElement('select');
+    dropdown.id = 'categoria-select';
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.text = 'Selecciona una opción';
+    dropdown.appendChild(defaultOption);
+
+    const opcionesCategoria = menuData.filter(item => item.categoria === categoriaActual);
+    opcionesCategoria.forEach((opcion, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.text = `Opción ${index + 1}: ${opcion.platillos.map(p => p.nombre).join(', ')}`;
+        dropdown.appendChild(option);
+    });
+
+    const botonAceptar = document.createElement('button');
+    botonAceptar.innerText = 'Aceptar';
+    botonAceptar.onclick = confirmarSeleccion;
+
+    container.appendChild(dropdown);
+    container.appendChild(botonAceptar);
+}
+
+function confirmarSeleccion() {
+    const selectElement = document.getElementById('categoria-select');
+    const selectedIndex = selectElement.value;
+    
+    if (selectedIndex !== '') {
+        if (!seleccion[menusSeleccionados]) {
+            seleccion[menusSeleccionados] = {};
+            diasPorMenu[menusSeleccionados] = 0;
+        }
+        
+        let claveSeleccion = categoriaActual;
+        if (categoriaActual === "Snack") {
+            claveSeleccion += indiceCategoriaActual === 1 ? "1" : "2";
+        }
+
+        seleccion[menusSeleccionados][claveSeleccion] = menuData.filter(item => item.categoria === categoriaActual)[selectedIndex];
+
+        indiceCategoriaActual++;
+        if (indiceCategoriaActual < categorias.length) {
+            categoriaActual = categorias[indiceCategoriaActual];
+            displayDropdownCategorias();
+        } else {
+            displayDiasRestantes();
+        }
+    } else {
+        alert('Por favor, selecciona una opción.');
+    }
+}
+
+function displayDiasRestantes() {
+    const container = document.getElementById('menu-container');
+    container.innerHTML = `<h2>¿Para cuántos días es este menú?</h2>`;
+    
+    const dropdown = document.createElement('select');
+    dropdown.id = 'dias-select';
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.text = 'Selecciona una opción';
+    dropdown.appendChild(defaultOption);
+
+    const diasRestantes = 7 - Object.values(diasPorMenu).reduce((acc, val) => acc + val, 0);
+    for (let i = 1; i <= diasRestantes; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.text = `${i} día(s)`;
+        dropdown.appendChild(option);
+    }
+
+    const botonAceptar = document.createElement('button');
+    botonAceptar.innerText = 'Aceptar';
+    botonAceptar.onclick = () => {
+        const seleccionDias = parseInt(document.getElementById('dias-select').value);
+        if (seleccionDias) {
+            diasPorMenu[menusSeleccionados] = seleccionDias;
+            menusSeleccionados++;
+            if (Object.values(diasPorMenu).reduce((acc, val) => acc + val, 0) < 7) {
+                resetearSeleccion();
+                displayDropdownCategorias();
+            } else {
+                generarResumenYListaDeCompras();
+            }
+        } else {
+            alert('Por favor, selecciona una opción.');
+        }
+    };
+
+    container.appendChild(dropdown);
+    container.appendChild(botonAceptar);
+}
+
+function resetearSeleccion() {
+    categoriaActual = "Desayuno";
+    indiceCategoriaActual = 0;
+}
+
+function generarResumenYListaDeCompras() {
+    let listaDeCompras = {};
+    let resumenMenu = '';
+
+    Object.keys(seleccion).forEach((menuId) => {
+        resumenMenu += `<div class="contenedor-resumen"><h2>Menú ${parseInt(menuId) + 1}</h2>`;
+        let contadorSnack = 1;
+        categorias.forEach((categoriaOriginal) => {
+            let categoria = categoriaOriginal;
+            if (categoria === "Snack") {
+                categoria += contadorSnack++;
+            }
+
+            if (seleccion[menuId][categoria] != null) {
+                resumenMenu += `<div class="tarjeta-categoria"><h3>${categoria}</h3>`;
+                seleccion[menuId][categoria].platillos.forEach((platillo) => {
+                    resumenMenu += `<div class="platillo"><strong>${platillo.nombre}</strong><ul>`;
+                    platillo.ingredientes.forEach(({ ingrediente, cantidad, unidad, cantidad_alternativa, unidad_alternativa }) => {
+                        const ingredienteNormalizado = normalizarIngrediente(ingrediente);
+                        if (!listaDeCompras[ingredienteNormalizado]) {
+                            listaDeCompras[ingredienteNormalizado] = { cantidad: 0, unidad };
+                        }
+                        listaDeCompras[ingredienteNormalizado].cantidad += cantidad * diasPorMenu[menuId];
+
+                        let textoCantidad = `${cantidad} ${unidad}`;
+                        if (cantidad_alternativa && unidad_alternativa) {
+                            textoCantidad += ` (${cantidad_alternativa} ${unidad_alternativa})`;
+                        }
+
+                        resumenMenu += `<li>${ingrediente}: ${textoCantidad}</li>`;
+                    });
+                    resumenMenu += '</ul></div>';
+                    resumenMenu += '<div class="espacio-entre-platillos"></div>';
+                });
+                resumenMenu += '</div>';
+            }
+        });
+        resumenMenu += '</div>';
+    });
+
+    let listaDeComprasParaLaSemana = Object.entries(listaDeCompras).map(([ingrediente, { cantidad, unidad }]) => {
+        return `<li>${ingrediente}: ${Math.ceil(cantidad)} ${unidad}</li>`;
+    });
+
+    const container = document.getElementById('menu-container');
+    container.innerHTML = `${resumenMenu}<h2>Lista de la compra para la semana</h2><ul class="lista-de-compras">${listaDeComprasParaLaSemana.join('')}</ul>`;
+}
+
+displayDropdownCategorias();
+
+    </script>
+  </body>
+</html>
